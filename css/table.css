@@ -1,0 +1,48 @@
+table {
+  border-collapse: collapse;
+}
+
+table.table {
+  width: 100%;
+  margin-bottom: 1rem;
+  color: #212529;
+}
+
+table.table thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #dee2e6;
+}
+
+table.table tr td, 
+table.table tr th {
+  padding: .75rem;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
+}
+
+table.table-sm tr td,
+table.table-sm tr th {
+   padding: .3rem;
+}
+
+.table-bordered {
+  border: 1px solid #dee2e6;
+}
+
+.table-bordered th,
+.table-bordered td {
+  border: 1px solid #dee2e6;
+}
+
+.table-bordered thead th,
+.table-bordered thead td {
+  border-bottom-width: 2px;
+}
+
+.mt-2 { 
+  margin-top:1em;
+}
+
+.mt-4 { 
+  margin-top: 1.5em;
+}

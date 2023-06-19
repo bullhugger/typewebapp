@@ -1,0 +1,30 @@
+body {
+  padding-top:0px;
+  font-size:10pt;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family:'Tahoma', 'Helvetica', sans-serif;
+  line-height:1em;
+  margin:0;
+}
+
+main {
+  margin-bottom:0;
+}
+
+thead h3 {
+  font-size:1.2rem;
+}
+
+.noprint {
+  display:none;
+}
+
+canvas#canvas {
+  page-break-before:always;
+}
+
+.page-break-avoid {
+  page-break-inside:avoid;
+}
