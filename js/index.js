@@ -36,6 +36,7 @@ function SetStart(event) {
   let start_y = event.clientY;
   document.removeEventListener("pointerdown", SetStart, true);
   document.addEventListener("pointermove", DrawLineMove(start_x, start_y), true);
+  console.log(start_x);
 }
 
 function DrawLineMove(x_start, y_start) {
