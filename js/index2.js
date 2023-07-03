@@ -25,24 +25,13 @@ function SelectMode(event) {
     }
   }
 }
-let start_pos = [];
-
 function DrawLine() {
-  document.addEventListener("pointerdown", SetStart, true);
+  let start_pos = document.addEventListener("pointerdown", SetStart, true);
+  alert(start_pos);
 }
 
-function SetStart(event) {
+function SetStart(event)) {
   let start_x = event.clientX;
   let start_y = event.clientY;
-  document.removeEventListener("pointerdown", SetStart, true);
-  document.addEventListener("pointermove", DrawLineMove(start_x, start_y), true);
-}
-
-function DrawLineMove(x_start, y_start) {
-  let x_pos = event.clientX;
-  let y_pos = event.clientY;
-  canvasCtx.beginPath();
-  canvasCtx.moveTo(x_start, y_start);
-  canvasCtx.lineTo(x_pos, y_pos);
-  canvasCtx.stroke();
+  return [start_x, start_y];
 }
