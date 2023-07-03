@@ -6,6 +6,7 @@ var arr_word = [];
 var arr_box = [];
 var start_pos = [];
 var move_pos = [];
+var end_pos = [];
 var arr_index = 0;
 var count_box = 0 ;
 var count_word = 0;
@@ -19,6 +20,7 @@ document.addEventListener("keypress", SelectMode, true);
 function SelectMode(event) {
   canvasCtx.canvas.width = window.innerWidth;
   canvasCtx.canvas.height = window.innerHeight;
+  document.removeEventListener("keypress", SelectMode, true);
   if(event.key== "Backspace") {
     event.preventDefault();
   }
