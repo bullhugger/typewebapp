@@ -4,7 +4,6 @@ var background_color = window.getComputedStyle(document.body, null).getPropertyV
 var font_color = window.getComputedStyle(document.body, null).getPropertyValue('color');
 var arr_word = [];
 var arr_box = [];
-var start_pos = [];
 var move_pos = [];
 var end_pos = [];
 var arr_index = 0;
@@ -14,12 +13,21 @@ var font_size = 30;
 var font_type = "Sans Serif";
 var tool_open = false;
 var move = false;
+var elements = [];
+var start_x = 0;
+var start_y = 0;
+var end_x = 0;
+var end_y = 0;
+var move_x = 0;
+var move_y = 0;
 
 document.addEventListener("keypress", SelectMode, true);
-
-function SelectMode(event) {
+$(document).ready(function() {
   canvasCtx.canvas.width = window.innerWidth;
   canvasCtx.canvas.height = window.innerHeight;
+});
+
+function SelectMode(event) {
   document.removeEventListener("keypress", SelectMode, true);
   if(event.key== "Backspace") {
     event.preventDefault();
@@ -29,43 +37,50 @@ function SelectMode(event) {
       case "l" :
         document.addEventListener("pointerdown", SetStart, true);
         document.addEventListener("pointerup", SetEnd, true);
+        break;
+      case "Escape" :
+        document.removeEventListener("pointerdown", SelectMode, false);
+        document.removeEventListener("pointerup", SelectMode, false);
       break;
     }
   }
 }
+
 function DrawLine(move) {
   if(move == true) {
     canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height);
     canvasCtx.beginPath();
-    canvasCtx.moveTo(start_pos[0], start_pos[1]);
-    canvasCtx.lineTo(move_pos[0], move_pos[1]);
+    canvasCtx.moveTo(start_x, start_y);
+    canvasCtx.lineTo(move_x, move_y);
     canvasCtx.stroke();
   }
   else {
     canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height);
     canvasCtx.beginPath();
-    canvasCtx.moveTo(start_pos[0], start_pos[1]);
-    canvasCtx.lineTo(end_pos[0], end_pos[1]);
+    canvasCtx.moveTo(start_x, start_y);
+    canvasCtx.lineTo(end_x, end_y);
     canvasCtx.stroke();
   }
 }
 
 function SetStart(event) {
-  start_pos[0] = event.clientX;
-  start_pos[1] = event.clientY;
-  document.removeEventListener("pointerdown", SetStart, true);
+  start_x = event.clientX;
+  start_y = event.clientY;
+  document.removeEventListener("pointerdown", SelectMode, true);
   document.addEventListener("pointermove", SetMove, true);
 }
 
 function SetMove(event) {
-  move_pos[0] = event.clientX;
-  move_pos[1] = event.clientY;
-  DrawLine(false);
+  move_x = event.clientX;
+  move_y = event.clientY;
+  DrawLine(true);
 }
 
 function SetEnd(event) {
-  end_pos[0] = event.clientX;
-  end_pos[1] = event.clientY;
+  end_x = event.clientX;
+  end_y = event.clientY;
   document.removeEventListener("pointermove", SetMove, true);
-  DrawLine(true);
+  DrawLine(false);
+  elements.push([start_x, start_y, end_x, end_y]);
+  console.table(elements)
 }
