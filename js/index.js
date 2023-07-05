@@ -28,21 +28,35 @@ $(document).ready(function() {
 });
 
 function SelectMode(event) {
-  document.removeEventListener("keypress", SelectMode, true);
   if(event.key== "Backspace") {
     event.preventDefault();
   }
   else {
     switch(event.key) {
       case "l" :
-        document.addEventListener("pointerdown", SetStart, true);
-        document.addEventListener("pointerup", SetEnd, true);
+        document.addEventListener("pointerdown", SetStartLine, true);
+        document.addEventListener("pointerup", SetEndLine, true);
         break;
-      case "Escape" :
-        document.removeEventListener("pointerdown", SelectMode, false);
-        document.removeEventListener("pointerup", SelectMode, false);
+      case "t" :
+        document.addEventListener("pointerdown", SetStartBox, true);
+        document.addEventListener("pointerup", SetEndBox, true);
       break;
     }
+  }
+}
+
+function DrawBox(move) {
+  if(move == true) {
+    canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height);
+    canvasCtx.beginPath();
+    canvasCtx.strokeRect(x_start, y_start, x_pos, y_pos);
+    canvasCtx.stroke();
+  }
+  else {
+    canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height);
+    canvasCtx.beginPath();
+    canvasCtx.strokeRect(x_start, y_start, x_pos, y_pos);
+    canvasCtx.stroke();
   }
 }
 
@@ -63,23 +77,31 @@ function DrawLine(move) {
   }
 }
 
-function SetStart(event) {
+function SetStartLine(event) {
   start_x = event.clientX;
   start_y = event.clientY;
-  document.removeEventListener("pointerdown", SelectMode, true);
-  document.addEventListener("pointermove", SetMove, true);
+  document.removeEventListener("pointerdown", SetStartLine, true);
+  document.addEventListener("pointermove", SetMoveLine, true);
 }
 
-function SetMove(event) {
+function SetStartBox(event) {
+  start_x = event.clientX;
+  start_y = event.clientY;
+  document.removeEventListener("pointerdown", SetStartBox, true);
+  document.addEventListener("pointermove", SetMoveBox, true);
+}
+
+function SetMoveLine(event) {
   move_x = event.clientX;
   move_y = event.clientY;
   DrawLine(true);
 }
 
-function SetEnd(event) {
+function SetEndLine(event) {
   end_x = event.clientX;
   end_y = event.clientY;
-  document.removeEventListener("pointermove", SetMove, true);
+  document.removeEventListener("pointermove", SetMoveLine, true);
+  document.removeEventListener("pointerup", SetEndLine, true);
   DrawLine(false);
   elements.push([start_x, start_y, end_x, end_y]);
   console.table(elements)
