@@ -91,6 +91,16 @@ function SetStartBox(event) {
   document.addEventListener("pointermove", SetMoveBox, true);
 }
 
+function SetEndBox(event) {
+  end_x = event.clientX;
+  end_y = event.clientY;
+  document.removeEventListener("pointermove", SetMoveBox, true);
+  document.removeEventListener("pointerup", SetEndBox, true);
+  DrawBox());
+  elements.push([start_x, start_y, end_x, end_y]);
+  console.table(elements)
+}
+
 function SetMoveLine(event) {
   move_x = event.clientX;
   move_y = event.clientY;
