@@ -77,6 +77,21 @@ function DrawLine(move) {
   }
 }
 
+function DrawBox(move) {
+  if(move == true) {
+    canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height);
+    canvasCtx.beginPath();
+    canvasCtx.drawRect(start_x, start_y - font_size, start_x + move_x, start_y + move_y);
+    canvasCtx.stroke();
+  }
+  else {
+    canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height);
+    canvasCtx.beginPath();
+    canvasCtx.drawRect(start_x, start_y - font_size, start_x + move_x, start_y + move_y);
+    canvasCtx.stroke();
+  }
+}
+
 function SetStartLine(event) {
   start_x = event.clientX;
   start_y = event.clientY;
@@ -96,7 +111,7 @@ function SetEndBox(event) {
   end_y = event.clientY;
   document.removeEventListener("pointermove", SetMoveBox, true);
   document.removeEventListener("pointerup", SetEndBox, true);
-  DrawBox());
+  DrawBox(false);
   elements.push([start_x, start_y, end_x, end_y]);
   console.table(elements)
 }
@@ -105,6 +120,12 @@ function SetMoveLine(event) {
   move_x = event.clientX;
   move_y = event.clientY;
   DrawLine(true);
+}
+
+function SetMoveBox(event) {
+  move_x = event.clientX;
+  move_y = event.clientY;
+  DrawBox(true);
 }
 
 function SetEndLine(event) {
