@@ -20,7 +20,6 @@ var end_x = 0;
 var end_y = 0;
 var move_x = 0;
 var move_y = 0;
-
 document.addEventListener("keypress", SelectMode, true);
 $(document).ready(function() {
   canvasCtx.canvas.width = window.innerWidth;
@@ -61,35 +60,28 @@ function DrawBox(move) {
 }
 
 function DrawLine(move) {
+  canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height);
+  canvasCtx.beginPath();
+  canvasCtx.moveTo(start_x, start_y);
   if(move == true) {
-    canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height);
-    canvasCtx.beginPath();
-    canvasCtx.moveTo(start_x, start_y);
     canvasCtx.lineTo(move_x, move_y);
-    canvasCtx.stroke();
   }
   else {
-    canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height);
-    canvasCtx.beginPath();
-    canvasCtx.moveTo(start_x, start_y);
     canvasCtx.lineTo(end_x, end_y);
-    canvasCtx.stroke();
   }
+  canvasCtx.stroke();
 }
 
 function DrawBox(move) {
+  canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height);
+  canvasCtx.beginPath();
   if(move == true) {
-    canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height);
-    canvasCtx.beginPath();
     canvasCtx.drawRect(start_x, start_y - font_size, start_x + move_x, start_y + move_y);
-    canvasCtx.stroke();
   }
   else {
-    canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height);
-    canvasCtx.beginPath();
-    canvasCtx.drawRect(start_x, start_y - font_size, start_x + move_x, start_y + move_y);
-    canvasCtx.stroke();
+    canvasCtx.drawRect(start_x, start_y - font_size, start_x + end_x, start_y + end_y);
   }
+  canvasCtx.stroke();
 }
 
 function SetStartLine(event) {
@@ -113,7 +105,8 @@ function SetEndBox(event) {
   document.removeEventListener("pointerup", SetEndBox, true);
   DrawBox(false);
   elements.push([start_x, start_y, end_x, end_y]);
-  console.table(elements)
+  console.table(elements);
+  document.addEventListener("keypress", TypeLetter, true);
 }
 
 function SetMoveLine(event) {
@@ -136,4 +129,14 @@ function SetEndLine(event) {
   DrawLine(false);
   elements.push([start_x, start_y, end_x, end_y]);
   console.table(elements)
+}
+
+function TypeLetter(event) {
+  letter = event.key;
+  switch(letter) {
+    case "Enter" :
+      start_y = start_y + font_size;
+      return start_y;
+      break;
+  }
 }
