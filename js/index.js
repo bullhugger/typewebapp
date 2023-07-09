@@ -20,10 +20,11 @@ var end_x = 0;
 var end_y = 0;
 var move_x = 0;
 var move_y = 0;
-document.addEventListener("keypress", SelectMode, true);
+
 $(document).ready(function() {
   canvasCtx.canvas.width = window.innerWidth;
   canvasCtx.canvas.height = window.innerHeight;
+  ReadyMode();
 });
 
 function SelectMode(event) {
@@ -33,10 +34,12 @@ function SelectMode(event) {
   else {
     switch(event.key) {
       case "l" :
+        document.removeEventListener("keypress", ReadyMode, true);
         document.addEventListener("pointerdown", SetStartLine, true);
         document.addEventListener("pointerup", SetEndLine, true);
-        break;
+      break;
       case "t" :
+        document.removeEventListener("keypress", ReadyMode, true);
         document.addEventListener("pointerdown", SetStartBox, true);
         document.addEventListener("pointerup", SetEndBox, true);
       break;
@@ -44,19 +47,8 @@ function SelectMode(event) {
   }
 }
 
-function DrawBox(move) {
-  if(move == true) {
-    canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height);
-    canvasCtx.beginPath();
-    canvasCtx.strokeRect(x_start, y_start, x_pos, y_pos);
-    canvasCtx.stroke();
-  }
-  else {
-    canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height);
-    canvasCtx.beginPath();
-    canvasCtx.strokeRect(x_start, y_start, x_pos, y_pos);
-    canvasCtx.stroke();
-  }
+function ReadyMode() {
+  document.addEventListener("keypress", SelectMode, true);
 }
 
 function DrawLine(move) {
@@ -76,10 +68,10 @@ function DrawBox(move) {
   canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height);
   canvasCtx.beginPath();
   if(move == true) {
-    canvasCtx.drawRect(start_x, start_y - font_size, start_x + move_x, start_y + move_y);
+    canvasCtx.strokeRect(start_x, start_y, move_x, move_y);
   }
   else {
-    canvasCtx.drawRect(start_x, start_y - font_size, start_x + end_x, start_y + end_y);
+    canvasCtx.strokeRect(start_x, start_y, end_x, end_y);
   }
   canvasCtx.stroke();
 }
@@ -105,7 +97,6 @@ function SetEndBox(event) {
   document.removeEventListener("pointerup", SetEndBox, true);
   DrawBox(false);
   elements.push([start_x, start_y, end_x, end_y]);
-  console.table(elements);
   document.addEventListener("keypress", TypeLetter, true);
 }
 
@@ -128,7 +119,6 @@ function SetEndLine(event) {
   document.removeEventListener("pointerup", SetEndLine, true);
   DrawLine(false);
   elements.push([start_x, start_y, end_x, end_y]);
-  console.table(elements)
 }
 
 function TypeLetter(event) {
