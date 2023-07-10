@@ -136,5 +136,11 @@ function TypeLetter(event) {
       start_y = start_y + font_size;
       return start_y;
       break;
+    case "Escape" :
+      document.removeEventListener("keypress", TypeLetter, true);
+      break;
+    default :
+      DrawText(letter); 
+      break;
   }
 }
