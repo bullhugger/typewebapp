@@ -1,8 +1,6 @@
 const canvasBox = document.getElementById("canvasBox");
 const canvasRect = canvasBox.getBoundingClientRect();
-const canvasCtx = canvasBox.getContext("2d");
-var background_color = window.getComputedStyle(document.body, null).getPropertyValue('background-color');
-var font_color = window.getComputedStyle(document.body, null).getPropertyValue('color');
+const canvasCtx = canvasBox.getContext("2d"); var background_color = window.getComputedStyle(document.body, null).getPropertyValue('background-color'); var font_color = window.getComputedStyle(document.body, null).getPropertyValue('color');
 let arr_word = [];
 let arr_box = [];
 let move_pos = [];
@@ -77,18 +75,27 @@ function DrawBox(move) {
   canvasCtx.stroke();
 }
 
-function SetStartLine(event) {
-  start_x = event.clientX - canvasRect.left;
-  start_y = event.clientY - canvasRect.top;
-  document.removeEventListener("pointerdown", SetStartLine, true);
-  document.addEventListener("pointermove", SetMoveLine, true);
+function DrawText(letter) {
+  canvasCtx.fillStyle = textColor;
+  canvasCtx.font = textFont;
+  canvasCtx.textBaseline = textBaseline;
+  canvasCtx.textAlign = textAlignment;
+  canvasCtx.fillText(letter, text_x, text_y);
 }
 
-function SetStartBox(event) {
+function SetStart(event, shape) {
   start_x = event.clientX - canvasRect.left;
   start_y = event.clientY - canvasRect.top;
-  document.removeEventListener("pointerdown", SetStartBox, true);
-  document.addEventListener("pointermove", SetMoveBox, true);
+  switch(shape) {
+    case "line" :
+      document.removeEventListener("pointerdown", SetStartLine, true);
+      document.addEventListener("pointermove", SetMoveLine, true);
+      break;
+    case "box" :
+      document.removeEventListener("pointerdown", SetStartBox, true);
+      document.addEventListener("pointermove", SetMoveBox, true);
+      break;
+  }
 }
 
 function SetEndBox(event) {
