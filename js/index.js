@@ -75,12 +75,12 @@ function DrawBox(move) {
   canvasCtx.stroke();
 }
 
-function DrawText(letter) {
+function DrawText(letter, letter_x, letter_y) {
   canvasCtx.fillStyle = textColor;
   canvasCtx.font = textFont;
   canvasCtx.textBaseline = textBaseline;
   canvasCtx.textAlign = textAlignment;
-  canvasCtx.fillText(letter, text_x, text_y);
+  canvasCtx.fillText(letter, letter_x, letter_y);
 }
 
 function SetStart(event, shape) {
@@ -136,11 +136,24 @@ function TypeLetter(event) {
       start_y = start_y + font_size;
       return start_y;
       break;
+    case "Backspace" :
+      arr_word.pop;
+      count_word--;
+      for(let i=0; i <= arr_word.length; i++) {
+        letter   = arr_word[i][0];
+        letter_x = arr_word[i][1];
+        letter_y = arr_word[i][2];
+        DrawText(letter, letter_x, letter_y);
+      }
+      break;
     case "Escape" :
       document.removeEventListener("keypress", TypeLetter, true);
       break;
     default :
-      DrawText(letter); 
+      letter_x = start_x + (font_size * count_word);
+      DrawText(letter, letter_x, letter_y);
+      count_word++;
+      arr_word.push(letter, letter_x, letter_y);
       break;
   }
 }
