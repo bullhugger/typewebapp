@@ -10,6 +10,7 @@ let count_box = 0;
 let count_word = 0;
 let font_size = 30;
 let font_type = "Sans Serif";
+let font_config = font_size + "px " + font_type;
 let tool_open = false;
 let move = false;
 let elements = [];
@@ -19,6 +20,8 @@ let end_x = 0;
 let end_y = 0;
 let move_x = 0;
 let move_y = 0;
+let font_align = "start";
+let font_baseline = "top";
 
 $(document).ready(function() {
   canvasCtx.canvas.width = window.innerWidth;
@@ -71,31 +74,33 @@ function DrawBox(move) {
   }
   else {
     canvasCtx.strokeRect(start_x, start_y, end_x - start_x, end_y - start_y);
+    letter_y = start_y;
+    letter_x = start_x;
+    document.removeEventListener("keypress", SelectMode, true);
   }
   canvasCtx.stroke();
 }
 
 function DrawText(letter, letter_x, letter_y) {
-  canvasCtx.fillStyle = textColor;
-  canvasCtx.font = textFont;
-  canvasCtx.textBaseline = textBaseline;
-  canvasCtx.textAlign = textAlignment;
+  canvasCtx.fillStyle = font_color;
+  canvasCtx.font = font_config;
+  canvasCtx.textBaseline = font_baseline;
+  canvasCtx.textAlign = font_align;
   canvasCtx.fillText(letter, letter_x, letter_y);
 }
 
-function SetStart(event, shape) {
+function SetStartBox(event) {
   start_x = event.clientX - canvasRect.left;
   start_y = event.clientY - canvasRect.top;
-  switch(shape) {
-    case "line" :
-      document.removeEventListener("pointerdown", SetStartLine, true);
-      document.addEventListener("pointermove", SetMoveLine, true);
-      break;
-    case "box" :
-      document.removeEventListener("pointerdown", SetStartBox, true);
-      document.addEventListener("pointermove", SetMoveBox, true);
-      break;
-  }
+  document.removeEventListener("pointerdown", SetStartBox, true);
+  document.addEventListener("pointermove", SetMoveBox, true);
+}
+
+function SetStartLine(event) {
+  start_x = event.clientX - canvasRect.left;
+  start_y = event.clientY - canvasRect.top;
+  document.removeEventListener("pointerdown", SetStartLine, true);
+  document.addEventListener("pointermove", SetMoveLine, true);
 }
 
 function SetEndBox(event) {
@@ -118,6 +123,7 @@ function SetMoveBox(event) {
   move_x = event.clientX - canvasRect.left;
   move_y = event.clientY - canvasRect.top;
   DrawBox(true);
+  count_word = 0;
 }
 
 function SetEndLine(event) {
@@ -133,8 +139,7 @@ function TypeLetter(event) {
   letter = event.key;
   switch (letter) {
     case "Enter":
-      start_y = start_y + font_size;
-      return start_y;
+      letter_y + font_size;
       break;
     case "Backspace" :
       arr_word.pop;
@@ -148,6 +153,7 @@ function TypeLetter(event) {
       break;
     case "Escape" :
       document.removeEventListener("keypress", TypeLetter, true);
+      document.addEventListener("keypress", SelectMode,true);
       break;
     default :
       letter_x = start_x + (font_size * count_word);
