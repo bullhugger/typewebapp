@@ -36,12 +36,12 @@ function SelectMode(event) {
   else {
     switch (event.key) {
       case "l":
-        document.removeEventListener("keypress", ReadyMode, true);
+        document.removeEventListener("keydown", ReadyMode, true);
         document.addEventListener("pointerdown", SetStartLine, true);
         document.addEventListener("pointerup", SetEndLine, true);
         break;
       case "t":
-        document.removeEventListener("keypress", ReadyMode, true);
+        document.removeEventListener("keydown", ReadyMode, true);
         document.addEventListener("pointerdown", SetStartBox, true);
         document.addEventListener("pointerup", SetEndBox, true);
         break;
@@ -50,7 +50,7 @@ function SelectMode(event) {
 }
 
 function ReadyMode() {
-  document.addEventListener("keypress", SelectMode, true);
+  document.addEventListener("keydown", SelectMode, true);
 }
 
 function DrawLine(move) {
@@ -76,7 +76,6 @@ function DrawBox(move) {
     canvasCtx.strokeRect(start_x, start_y, end_x - start_x, end_y - start_y);
     letter_y = start_y;
     letter_x = start_x;
-    document.removeEventListener("keypress", SelectMode, true);
   }
   canvasCtx.stroke();
 }
@@ -92,6 +91,7 @@ function DrawText(letter, letter_x, letter_y) {
 function SetStartBox(event) {
   start_x = event.clientX - canvasRect.left;
   start_y = event.clientY - canvasRect.top;
+  document.removeEventListener("keydown", SelectMode, true);
   document.removeEventListener("pointerdown", SetStartBox, true);
   document.addEventListener("pointermove", SetMoveBox, true);
 }
@@ -110,7 +110,7 @@ function SetEndBox(event) {
   document.removeEventListener("pointerup", SetEndBox, true);
   DrawBox(false);
   elements.push([start_x, start_y, end_x, end_y]);
-  document.addEventListener("keypress", TypeLetter, true);
+  document.addEventListener("keydown", TypeLetter, true);
 }
 
 function SetMoveLine(event) {
@@ -135,31 +135,60 @@ function SetEndLine(event) {
   elements.push([start_x, start_y, end_x, end_y]);
 }
 
+function RedrawText() {
+  for(let i=0; i <= arr_word.length; i++) {
+    letter   = arr_word[i][0];
+    letter_x = arr_word[i][1];
+    letter_y = arr_word[i][2];
+    DrawText(letter, letter_x, letter_y);
+  }
+}
+
 function TypeLetter(event) {
   letter = event.key;
-  switch (letter) {
+  switch(letter) {
     case "Enter":
-      letter_y + font_size;
+      letter_y = letter_y + font_size;
       break;
     case "Backspace" :
       arr_word.pop;
       count_word--;
-      for(let i=0; i <= arr_word.length; i++) {
-        letter   = arr_word[i][0];
-        letter_x = arr_word[i][1];
-        letter_y = arr_word[i][2];
-        DrawText(letter, letter_x, letter_y);
-      }
+      RedrawText();
       break;
     case "Escape" :
-      document.removeEventListener("keypress", TypeLetter, true);
-      document.addEventListener("keypress", SelectMode,true);
+      document.removeEventListener("keydown", TypeLetter, true);
+      canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height);
+      RedrawText();
+      ReadyMode();
+      break;
+    case "Alt" :
+      break;
+    case "Control" :
+      break;
+    case "Shift" :
+      break;
+    case "Home" :
       break;
     default :
       letter_x = start_x + (font_size * count_word);
+      if(letter_y > end_y) {
+        alert("Maximum size exceeded, please redraw the box.");
+        break;
+      }
+      else {
+        if(letter_x >= end_x - font_size) {
+          count_word = 0;
+          letter_x = start_x;
+          letter_y = letter_y + font_size;
+        }
+      }
       DrawText(letter, letter_x, letter_y);
       count_word++;
-      arr_word.push(letter, letter_x, letter_y);
+      arr_word.push([letter, letter_x, letter_y]);
+      console.table(arr_word);
       break;
   }
+}
+
+function RemoveTypeLetter() {
 }
