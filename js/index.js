@@ -3,8 +3,9 @@ const canvasRect = canvasBox.getBoundingClientRect();
 const canvasCtx = canvasBox.getContext("2d"); var background_color = window.getComputedStyle(document.body, null).getPropertyValue('background-color'); var font_color = window.getComputedStyle(document.body, null).getPropertyValue('color');
 let arr_word = [];
 let arr_box = [];
-let move_pos = [];
-let end_pos = [];
+let arr_object = [];
+let arr_move_pos = [];
+let arr_end_pos = [];
 let arr_index = 0;
 let count_box = 0;
 let count_word = 0;
@@ -36,12 +37,12 @@ function SelectMode(event) {
   else {
     switch (event.key) {
       case "l":
-        document.removeEventListener("keydown", ReadyMode, true);
+        document.removeEventListener("keydown", SelectMode, true);
         document.addEventListener("pointerdown", SetStartLine, true);
         document.addEventListener("pointerup", SetEndLine, true);
         break;
       case "t":
-        document.removeEventListener("keydown", ReadyMode, true);
+        document.removeEventListener("keydown", SelectMode, true);
         document.addEventListener("pointerdown", SetStartBox, true);
         document.addEventListener("pointerup", SetEndBox, true);
         break;
@@ -136,7 +137,7 @@ function SetEndLine(event) {
 }
 
 function RedrawText() {
-  for(let i=0; i <= arr_word.length; i++) {
+  for(let i=0; i < arr_word.length; i++) {
     letter   = arr_word[i][0];
     letter_x = arr_word[i][1];
     letter_y = arr_word[i][2];
@@ -159,6 +160,7 @@ function TypeLetter(event) {
       document.removeEventListener("keydown", TypeLetter, true);
       canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height);
       RedrawText();
+      StoreObject();
       ReadyMode();
       break;
     case "Alt" :
@@ -175,20 +177,21 @@ function TypeLetter(event) {
         alert("Maximum size exceeded, please redraw the box.");
         break;
       }
-      else {
-        if(letter_x >= end_x - font_size) {
-          count_word = 0;
-          letter_x = start_x;
-          letter_y = letter_y + font_size;
-        }
+      if(letter_x >= end_x - font_size) {
+        count_word = 0;
+        letter_x = start_x;
+        letter_y = letter_y + font_size;
       }
       DrawText(letter, letter_x, letter_y);
       count_word++;
       arr_word.push([letter, letter_x, letter_y]);
-      console.table(arr_word);
       break;
   }
 }
 
-function RemoveTypeLetter() {
+
+function StoreObject() {
+  arr_object.push(arr_word);
+  arr_word = [];
+  console.table(arr_object);
 }
