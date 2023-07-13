@@ -4,25 +4,23 @@ const canvasCtx = canvasBox.getContext("2d"); var background_color = window.getC
 let arr_word = [];
 let arr_box = [];
 let arr_object = [];
-let arr_move_pos = [];
-let arr_end_pos = [];
+let arr_element = [];
 let arr_index = 0;
-let count_box = 0;
 let count_word = 0;
+let font_align = "start";
+let font_baseline = "top";
 let font_size = 30;
 let font_type = "Sans Serif";
 let font_config = font_size + "px " + font_type;
 let tool_open = false;
 let move = false;
-let elements = [];
 let start_x = 0;
 let start_y = 0;
 let end_x = 0;
 let end_y = 0;
 let move_x = 0;
 let move_y = 0;
-let font_align = "start";
-let font_baseline = "top";
+let line_weight = "5px";
 
 $(document).ready(function() {
   canvasCtx.canvas.width = window.innerWidth;
@@ -54,16 +52,17 @@ function ReadyMode() {
   document.addEventListener("keydown", SelectMode, true);
 }
 
-function DrawLine(move) {
-  canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height);
+function DrawLine(move, start_x, start_y, end_x, end_y) {
   canvasCtx.beginPath();
   canvasCtx.moveTo(start_x, start_y);
   if (move === true) {
+    canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height);
     canvasCtx.lineTo(move_x, move_y);
   }
   else {
     canvasCtx.lineTo(end_x, end_y);
   }
+  canvasCtx.lineWidth = line_weight;
   canvasCtx.stroke();
 }
 
@@ -110,20 +109,20 @@ function SetEndBox(event) {
   document.removeEventListener("pointermove", SetMoveBox, true);
   document.removeEventListener("pointerup", SetEndBox, true);
   DrawBox(false);
-  elements.push([start_x, start_y, end_x, end_y]);
+  arr_element.push([start_x, start_y, end_x, end_y]);
   document.addEventListener("keydown", TypeLetter, true);
 }
 
 function SetMoveLine(event) {
   move_x = event.clientX - canvasRect.left;
   move_y = event.clientY - canvasRect.top;
-  DrawLine(true);
+  DrawLine(true, start_x, start_y, move_x, move_y);
 }
 
 function SetMoveBox(event) {
   move_x = event.clientX - canvasRect.left;
   move_y = event.clientY - canvasRect.top;
-  DrawBox(true);
+  DrawBox(true, start_x, start_y, move_x, move_y);
   count_word = 0;
 }
 
@@ -132,8 +131,11 @@ function SetEndLine(event) {
   end_y = event.clientY - canvasRect.top;
   document.removeEventListener("pointermove", SetMoveLine, true);
   document.removeEventListener("pointerup", SetEndLine, true);
-  DrawLine(false);
-  elements.push([start_x, start_y, end_x, end_y]);
+  DrawLine(true, start_x, start_y, end_x, end_y);
+  arr_element.push(["line", start_x, start_y, end_x, end_y]);
+  console.table(arr_element);
+  DrawShape();
+  ReadyMode();
 }
 
 function RedrawText() {
@@ -142,6 +144,23 @@ function RedrawText() {
     letter_x = arr_word[i][1];
     letter_y = arr_word[i][2];
     DrawText(letter, letter_x, letter_y);
+  }
+}
+
+function DrawShape() {
+  for(let i=0; i < arr_element.length; i++) {
+    shape = arr_element[i][0];
+    start_x = arr_element[i][1];
+    start_y = arr_element[i][2];
+    end_x = arr_element[i][3];
+    end_y = arr_element[i][4];
+    switch(shape) {
+      case "line" :
+        DrawLine(false, start_x, start_y, end_x, end_y);
+        break;
+      case "box" :
+        break;
+    }
   }
 }
 
@@ -188,7 +207,6 @@ function TypeLetter(event) {
       break;
   }
 }
-
 
 function StoreObject() {
   arr_object.push(arr_word);
