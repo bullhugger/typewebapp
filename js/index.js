@@ -14,14 +14,6 @@ let font_type = "Sans Serif";
 let font_config = font_size + "px " + font_type;
 let tool_open = false;
 let move = false;
-<<<<<<< HEAD
-let start_x = 0;
-let start_y = 0;
-let end_x = 0;
-let end_y = 0;
-let move_x = 0;
-let move_y = 0;
-=======
 let start_x     = 0;
 let start_y     = 0;
 let end_x       = 0;
@@ -30,7 +22,6 @@ let move_x      = 0;
 let move_y      = 0;
 let letter_x    = 0;
 let letter_y    = 0;
->>>>>>> 49c5a3d (update box and type functions to be reused in shape functions)
 let line_weight = "5px";
 
 $(document).ready(function() {
@@ -45,17 +36,6 @@ function SelectMode(event) {
   }
   else {
     switch (event.key) {
-<<<<<<< HEAD
-      case "l":
-        document.removeEventListener("keydown", SelectMode, true);
-        document.addEventListener("pointerdown", SetStartLine, true);
-        document.addEventListener("pointerup", SetEndLine, true);
-        break;
-      case "t":
-        document.removeEventListener("keydown", SelectMode, true);
-        document.addEventListener("pointerdown", SetStartBox, true);
-        document.addEventListener("pointerup", SetEndBox, true);
-=======
       case "l" :
         document.removeEventListener("keydown", SelectMode);
         document.addEventListener("pointerdown", SetStartLine);
@@ -73,18 +53,13 @@ function SelectMode(event) {
         document.addEvenlistener("pointerup", function() {
           SetEndBox(event, false);
         });
->>>>>>> 49c5a3d (update box and type functions to be reused in shape functions)
         break;
     }
   }
 }
 
 function ReadyMode() {
-<<<<<<< HEAD
-  document.addEventListener("keydown", SelectMode, true);
-=======
   document.addEventListener("keydown", SelectMode);
->>>>>>> 49c5a3d (update box and type functions to be reused in shape functions)
 }
 
 function DrawLine(move, start_x, start_y, end_x, end_y) {
@@ -127,28 +102,6 @@ function DrawText(letter, letter_x, letter_y) {
 function SetStartBox(event) {
   start_x = event.clientX - canvasRect.left;
   start_y = event.clientY - canvasRect.top;
-<<<<<<< HEAD
-  document.removeEventListener("keydown", SelectMode, true);
-  document.removeEventListener("pointerdown", SetStartBox, true);
-  document.addEventListener("pointermove", SetMoveBox, true);
-}
-
-function SetStartLine(event) {
-  start_x = event.clientX - canvasRect.left;
-  start_y = event.clientY - canvasRect.top;
-  document.removeEventListener("pointerdown", SetStartLine, true);
-  document.addEventListener("pointermove", SetMoveLine, true);
-}
-
-function SetEndBox(event) {
-  end_x = event.clientX - canvasRect.left;
-  end_y = event.clientY - canvasRect.top;
-  document.removeEventListener("pointermove", SetMoveBox, true);
-  document.removeEventListener("pointerup", SetEndBox, true);
-  DrawBox(false);
-  arr_element.push([start_x, start_y, end_x, end_y]);
-  document.addEventListener("keydown", TypeLetter, true);
-=======
   document.removeEventListener("keydown", SelectMode);
   document.removeEventListener("pointerdown", SetStartBox);
   document.addEventListener("pointermove", SetMoveBox);
@@ -159,7 +112,6 @@ function SetStartLine(event) {
   start_y = event.clientY - canvasRect.top;
   document.removeEventListener("pointerdown", SetStartLine);
   document.addEventListener("pointermove", SetMoveLine);
->>>>>>> 49c5a3d (update box and type functions to be reused in shape functions)
 }
 
 function SetMoveLine(event) {
@@ -178,13 +130,8 @@ function SetMoveBox(event) {
 function SetEndLine(event) {
   end_x = event.clientX - canvasRect.left;
   end_y = event.clientY - canvasRect.top;
-<<<<<<< HEAD
-  document.removeEventListener("pointermove", SetMoveLine, true);
-  document.removeEventListener("pointerup", SetEndLine, true);
-=======
   document.removeEventListener("pointermove", SetMoveLine);
   document.removeEventListener("pointerup", SetEndLine);
->>>>>>> 49c5a3d (update box and type functions to be reused in shape functions)
   DrawLine(true, start_x, start_y, end_x, end_y);
   arr_element.push(["line", start_x, start_y, end_x, end_y]);
   console.table(arr_element);
@@ -192,8 +139,6 @@ function SetEndLine(event) {
   ReadyMode();
 }
 
-<<<<<<< HEAD
-=======
 function SetEndBox(event, type) {
   end_x = event.clientX - canvasRect.left;
   end_y = event.clientY - canvasRect.top;
@@ -201,8 +146,6 @@ function SetEndBox(event, type) {
   if(type == false) {
     DrawBox(false);
     arr_element.push(["box", start_x, start_y, end_x, end_y]);
-    letter_x = start_x;
-    letter_y = start_y;
   }
   else {
     document.addEventListener("keydown", TypeLetter);
@@ -210,7 +153,6 @@ function SetEndBox(event, type) {
   document.removeEventListener("pointerup", SetEndBox);
 }
 
->>>>>>> 49c5a3d (update box and type functions to be reused in shape functions)
 function RedrawText() {
   for(let i=0; i < arr_word.length; i++) {
     letter   = arr_word[i][0];
@@ -232,10 +174,7 @@ function DrawShape() {
         DrawLine(false, start_x, start_y, end_x, end_y);
         break;
       case "box" :
-<<<<<<< HEAD
-=======
         DrawBox(false, start_x, start_y, end_x, end_y);
->>>>>>> 49c5a3d (update box and type functions to be reused in shape functions)
         break;
     }
   }
@@ -245,11 +184,7 @@ function TypeLetter(event) {
   letter = event.key;
   switch(letter) {
     case "Enter":
-<<<<<<< HEAD
-      letter_y = letter_y + font_size;
-=======
       letter_y += font_size;
->>>>>>> 49c5a3d (update box and type functions to be reused in shape functions)
       break;
     case "Backspace" :
       arr_word.pop;
@@ -257,11 +192,7 @@ function TypeLetter(event) {
       RedrawText();
       break;
     case "Escape" :
-<<<<<<< HEAD
-      document.removeEventListener("keydown", TypeLetter, true);
-=======
       document.removeEventListener("keydown", TypeLetter);
->>>>>>> 49c5a3d (update box and type functions to be reused in shape functions)
       canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height);
       RedrawText();
       StoreObject();
@@ -284,11 +215,7 @@ function TypeLetter(event) {
       if(letter_x >= end_x - font_size) {
         count_word = 0;
         letter_x = start_x;
-<<<<<<< HEAD
-        letter_y = letter_y + font_size;
-=======
         letter_y += font_size;
->>>>>>> 49c5a3d (update box and type functions to be reused in shape functions)
       }
       DrawText(letter, letter_x, letter_y);
       count_word++;
