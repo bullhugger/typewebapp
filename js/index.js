@@ -148,7 +148,9 @@ function SetEndBox(event, type) {
     arr_element.push(["box", start_x, start_y, end_x, end_y]);
   }
   else {
-    document.addEventListener("keydown", TypeLetter);
+    document.addEventListener("keydown", function() {
+      TypeLetter(event, start_x, start_y);
+    });
   }
   document.removeEventListener("pointerup", SetEndBox);
 }
@@ -180,7 +182,7 @@ function DrawShape() {
   }
 }
 
-function TypeLetter(event) {
+function TypeLetter(event, letter_x, letter_y) {
   letter = event.key;
   switch(letter) {
     case "Enter":
