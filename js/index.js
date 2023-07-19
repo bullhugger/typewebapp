@@ -1,6 +1,6 @@
-const canvasBox = document.getElementById("canvasBox");
-const canvasRect = canvasBox.getBoundingClientRect();
-const canvasCtx = canvasBox.getContext("2d");
+var canvasBox = document.getElementById("canvasBox");
+var canvasRect = canvasBox.getBoundingClientRect();
+var canvasCtx = canvasBox.getContext("2d");
 var background_color = window.getComputedStyle(document.body, null).getPropertyValue('background-color');
 var font_color = window.getComputedStyle(document.body, null).getPropertyValue('color');
 let arr_word = [];
@@ -40,18 +40,21 @@ function SelectMode(event) {
         document.removeEventListener("keydown", SelectMode, true);
         document.addEventListener("pointerdown", SetStartLine, true);
         document.addEventListener("pointerup", SetEndLine, true);
-        break;
+      break;
       case "t":
         document.removeEventListener("keydown", SelectMode, true);
         document.addEventListener("pointerdown", SetStartBox, true);
         document.addEventListener("pointerup", SetEndBox, true);
-        break;
+      break;
     }
   }
 }
 
 function ReadyMode() {
   document.addEventListener("keydown", SelectMode, true);
+  canvasBox = document.getElementById("canvasBox");
+  canvasRect = canvasBox.getBoundingClientRect();
+  canvasCtx = canvasBox.getContext("2d");
 }
 
 function DrawLine(move, start_x, start_y, end_x, end_y) {
@@ -195,7 +198,7 @@ function TypeLetter(event) {
       break;
     default :
       letter_x = start_x + (font_size * count_word);
-      if(letter_y > end_y) {
+      if(letter_y + font_size > end_y ) {
         alert("Maximum size exceeded, please redraw the box.");
         break;
       }
