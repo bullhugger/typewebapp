@@ -12,7 +12,7 @@ let count_word = 0;
 let font_align = "start";
 let font_baseline = "top";
 let font_size = 30;
-let font_type = "Sans Serif";
+var font_type = "Sans Serif";
 let font_config = font_size + "px " + font_type;
 let tool_open = false;
 let move = false;
@@ -29,6 +29,10 @@ $(document).ready(function() {
   canvasCtx.canvas.height = window.innerHeight;
   ReadyMode();
 });
+
+function ChangeFont() {
+  font_type = $('#fontType').val();
+}
 
 function SelectMode(event) {
   if (event.key == "Backspace") {
@@ -148,7 +152,7 @@ function RedrawText() {
     letter   = arr_word[i][0];
     letter_x = arr_word[i][1];
     letter_y = arr_word[i][2];
-    DrawText(letter, letter_x, letter_y);
+    DrawText(letter, letter_x, letter_y, font_size, font_type);
   }
 }
 
@@ -174,7 +178,7 @@ function TypeLetter(event) {
   letter = event.key;
   switch(letter) {
     case "Enter":
-      letter_y = letter_y + font_size;
+      letter_y += font_size;
       break;
     case "Backspace" :
       arr_word.pop;
@@ -209,7 +213,7 @@ function TypeLetter(event) {
       }
       DrawText(letter, letter_x, letter_y);
       count_word++;
-      arr_word.push([letter, letter_x, letter_y]);
+      arr_word.push([letter, letter_x, letter_y, font_size, font_type]);
       break;
   }
 }
