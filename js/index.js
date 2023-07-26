@@ -26,13 +26,11 @@ let line_weight = "5px";
 
 function SaveFile() {
   var save_state_word = JSON.stringfy(arr_word);
-  var save_state_shape = JSON.stringfy(arr_element);
+  var save_state_shape = JSON.stringfy(arr_object);
   $.ajax ({
     url: 'typeweb.action.php',
     dataType: 'json',
-    data: {
-      a:'save', data: arr_word
-    },
+    data: {a:'save', data: save_state_word},
     success: function(data) {
       alert('File saved.');
     }
