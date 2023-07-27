@@ -212,6 +212,35 @@ function TypeLetter(event) {
     case "Shift" :
       break;
     case "Home" :
+      count_word = 0;
+      letter_x = start_x;
+      break;
+    case "End" :
+      letter_x = start_x + (font_size * count_word);
+      break;
+    case "F1" :
+      break;
+    case "F2" :
+      break;
+    case "F3" :
+      break;
+    case "F4" :
+      break;
+    case "F5" :
+      break;
+    case "F6" :
+      break;
+    case "F7" :
+      break;
+    case "F8" :
+      break;
+    case "F9" :
+      break;
+    case "F10" :
+      break;
+    case "F11" :
+      break;
+    case "F12" :
       break;
     default :
       letter_x = start_x + (font_size * count_word);
