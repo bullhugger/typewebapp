@@ -19,7 +19,9 @@ switch($action) {
     $query = "SELECT * FROM ".TYPE_APP." WHERE id=$id LIMIT 1";
     $result = $db->query($query);
     if($result !== false) {
-
+      while($row = $query->fetch($result)) {
+        json_encode($row);
+      }
     }
 }
 ?>
