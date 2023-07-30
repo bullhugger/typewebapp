@@ -244,10 +244,6 @@ function TypeLetter(event) {
       break;
     default :
       letter_x = start_x + (font_size * count_word);
-      if(letter_y + font_size > end_y ) {
-        alert("Maximum size exceeded, please redraw the box.");
-        break;
-      }
       if(letter_x >= end_x - font_size) {
         count_word = 0;
         letter_x = start_x;
