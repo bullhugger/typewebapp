@@ -7,36 +7,43 @@ require_once("../../user.class.php");
 session_start();
 $login = new Login();
 if($login->status) {
+  $id = $_POST["id"];
   $uid = $login->id;
-  $user = User::GetUser($uid, $db);
   $db = new Database();
   $db->open();
+  $user = User::GetUser($uid, $db);
   $action = $_POST["action"];
   switch($action) {
     case "save" :
-      $object = json_encode($_POST["elements"]);
-      $name = $_POST["name"];
-      if(empty($object)) {
-        echo("Can't save empty file.");
-        break;
-      }
-      else {
-        $query = "SELECT * FROM ".TYPE_APP." WHERE name=$name AND creatorid=$login->id";
-        $result = $db->query($query);
-        if(!empty($result)) {
-          $file_name = $db->fetch($result)["name"];
-          echo("File $file_name already exist, overwrite file name?");
-          $confirm = $_POST["confirm"];
-          if($confirm) {
-            $query = "INSERT INTO ".TYPE_APP." SET object=$object, name=$name, creatorid=$login->id";
-          }
+      $name      = $_POST["name"];
+      $word      = $_POST["word"];
+      $shape     = $_POST["shape"];
+      $overwrite = $_POST["overwrite"];
+      $query = "SELECT name FROM ".TYPE_APP." WHERE creatorid=$login->id";
+      $result = $db->query($query);
+      if($result !== false) {
+        while($row = $db->fetch($result)) {
+          $arr_file_name = $row["name"];
+        }
+        if(!in_array($name, $arr_file_name)) {
+          $query = "INSERT INTO ".TYPE_APP." (word, shape, `name`, creatorid) VALUES ('$word', '$shape', '$name', $login->id)";
         }
         else {
-          $query = "INSERT INTO ".TYPE_APP." SET object=$object, name=$name, creatorid=$login->id";
+          echo "File name already exist, overwrite?";
+          $response = $_POST["response"];
+          if($response) {
+            $query = "INSERT INTO ".TYPE_APP." (word, shape, `name`, creatorid) VALUES ('$word', '$shape', '$name', $login->id)";
+          }
+          else {
+            $query = "UPDATE ".TYPE_APP." SET shape='$shape', word='$word' WHERE name=$name AND creatorid=$login->id";
+          }
         }
         $result = $db->query($query);
         if($result !== false) {
           echo("File $name saved.");
+        }
+        else {
+          echo($query.$db->error());
         }
       }
       break;
@@ -46,8 +53,9 @@ if($login->status) {
       $result = $db->query($query);
       if($result !== false) {
         while($row = $query->fetch($result)) {
-          json_encode($row);
+          $object = json_decode($row);
         }
+        echo($object);
       }
   }
 }

@@ -25,16 +25,19 @@ let move_y = 0;
 let line_weight = "5px";
 
 function SaveFile() {
-  var save_state_word = JSON.stringfy(arr_word);
-  var save_state_shape = JSON.stringfy(arr_object);
-  $.ajax ({
-    url: 'typeweb.action.php',
+  var id        = $('#userid').val()
+  var name      = $('#file_name').val();
+  var overwrite = $('#overwrite').val();
+  var word  = JSON.stringify($('#word_save_state').val());
+  var shape = JSON.stringify($('#shape_save_state').val());
+  $.ajax({
+    url: 'action/save_file.php',
+    type: 'POST',
     dataType: 'json',
-    data: {a:'save', data: save_state_word},
-    success: function(data) {
-      alert('File saved.');
-    }
-  })
+    data: {a:'save', shape:shape, word:word, overwrite:overwrite, name:name, id:id}
+  }).done(function(data) {
+      $('#save_alert').after('<div class=\"row\"><div class\"col\">' + data + '</div></div>');
+  });
 }
 
 $(document).ready(function() {
@@ -256,9 +259,9 @@ function TypeLetter(event) {
 function LoadSavedFile(id) {
   var id = $('#id').val();
   $.ajax({
-    url: 'type_search',
+    url: 'save_search',
     dataType: 'HTML',
-    data: { id:id, a:'saved_file'},
+    data: { id:id, a:'saved_file', o:overwrite},
     success: function(data) {
       $('#selectSaved').append(data);
     }
@@ -266,7 +269,7 @@ function LoadSavedFile(id) {
 }
 
 function StoreObject() {
-  arr_object.push(arr_word);
-  arr_word = [];
+  $('#word_save_state').val(arr_word);
+  $('#shape_save_state').val(arr_object);
   console.table(arr_object);
 }
