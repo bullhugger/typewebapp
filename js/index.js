@@ -139,10 +139,7 @@ function SetMoveLine(event) {
   move_x = event.clientX - canvasRect.left;
   move_y = event.clientY - canvasRect.top;
   DrawLine(true, start_x, start_y, move_x, move_y);
-}
-
-function SetMoveBox(event) {
-  move_x = event.clientX - canvasRect.left;
+} function SetMoveBox(event) { move_x = event.clientX - canvasRect.left;
   move_y = event.clientY - canvasRect.top;
   DrawBox(true, start_x, start_y, move_x, move_y);
   count_word = 0;
@@ -254,6 +251,18 @@ function TypeLetter(event) {
       arr_word.push([letter, letter_x, letter_y, font_size, font_type]);
       break;
   }
+}
+
+function LoadSavedFile(id) {
+  var id = $('#id').val();
+  $.ajax({
+    url: 'type_search',
+    dataType: 'HTML',
+    data: { id:id, a:'saved_file'},
+    success: function(data) {
+      $('#selectSaved').append(data);
+    }
+  })
 }
 
 function StoreObject() {
